@@ -1,148 +1,80 @@
-var calcMemory = 0.0;
-var calcEntry = 0.0;
-var activeOperator = null;
-var operators = ["+", "-", "X", "/"];
-var result = 0;
-var status;
 
-//TO DO FIX JAVASCRIPT ROUNDING ERROR
-function plusFunc()  {
-  return ((1000000*calcMemory) + (1000000*calcEntry))/1000000;};
-function minusFunc()  {return ((1000000*calcMemory) - (1000000*calcEntry))/1000000;};
-function timesFunc()  {return ((1000*calcMemory) * (1000*calcEntry))/1000000;};
-function dividedFunc() {return ((1000000*calcMemory) / (1000000*calcEntry));};
-    
-function numEntry(x) {
-  if (activeOperator == null) {
-    let temp = calcEntry.toString() + x.toString();
-    calcEntry = parseFloat(temp);
-    document.getElementById("screen").innerText = calcEntry;
-  }
-  else if (activeOperator == "Ans" || result != 0 && status == "first entry") {
-    calcMemory = result;
-    let temp = x.toString();
-    calcEntry = parseFloat(temp);
-    document.getElementById("screen").innerText = calcEntry;
-    status = "done";
-    activeOperator = null;
-  }
-  else {
-    let temp = calcEntry.toString() + x.toString();
-    calcEntry = parseFloat(temp);
-    document.getElementById("screen").innerText = calcEntry;
-  }
-}
-
-function numDelete() {
-  if (activeOperator == null) {
-    var string = calcEntry.toString();
-    var temp = string.slice(0, string.length-1);
-    calcEntry = parseFloat(temp);
-    document.getElementById("screen").innerText = calcEntry;
-  }
-  else {
-    activeOperator = null;
-    document.getElementById("miniscreen").innerText = activeOperator;
-  }
-}
-
-function allDelete()  {
-  document.getElementById("screen").innerText = "";
-  calcMemory = 0;
-  calcEntry = 0;
-  result = 0;
-  activeOperator = null;
-  document.getElementById("miniscreen").innerText = activeOperator;
-}
-
-function addDecimalPoint(x) {
-  var tempString = calcEntry.toString() + x;
-  calcEntry = tempString;
-  document.getElementById("screen").innerText = calcEntry;
-}
+let result = null;
 
 
-function operatorEntry(x) {
-  if (activeOperator != null && activeOperator != "Ans") {
-    executeCalc();
-    activeOperator = null;
-    operatorEntry(x);
-    }
-  else {
-    if (result==0) {calcMemory = parseFloat(calcEntry);}
-    else {calcMemory = result;}
-    calcEntry = 0.0;
-    activeOperator = x;
-    document.getElementById("miniscreen").innerText = x;
-    status = "done";
-  }
-}
-
-function executeCalc()  {
-  calcEntry= parseFloat(calcEntry);
-  if (activeOperator != null) {
-    if (activeOperator == "+")  {result = plusFunc();}
-    else if (activeOperator == "-")  {result = minusFunc();}
-    else if (activeOperator == "X")  {result = timesFunc();}
-    else if (activeOperator == "/")  {result = dividedFunc();}
-    else {result = "error";}
-    document.getElementById("screen").innerText = Math.round(1000*result)/1000;
-    activeOperator = "Ans";
-    document.getElementById("miniscreen").innerText = "";
-    status = "first entry";
-    calcMemory = result;
-  }
-}
+/*********************************************************/
+/* Calculator functions: */
+/*********************************************************/
 
 
 
-//Attach Event Listeners to Virtual Calculator Buttons
+function zero(func)   { return func ? func(0) : 0; };
+function one(func)    { return func ? func(1) : 1; };
+function two(func)    { return func ? func(2) : 2; };
+function three(func)  { return func ? func(3) : 3; };
+function four(func)   { return func ? func(4) : 4; };
+function five(func)   { return func ? func(5) : 5; };
+function six(func)    { return func ? func(6) : 6; };
+function seven(func)  { return func ? func(7) : 7; };
+function eight(func)  { return func ? func(8) : 8; };
+function nine(func)   { return func ? func(9) : 9; };
 
-document.addEventListener("DOMContentLoaded", function(event) { 
+
+function plus( b )      { return function( a ) { return a + b; }; };
+function minus( b )     { return function( a ) { return a - b; }; };
+function times( b )     { return function( a ) { return a * b; }; };
+function dividedBy( b ) { return function( a ) { return a / b; }; };
 
 
-  for (var x=0; x<10; x++)  {
-    let temp = x;
-    document.getElementById(temp).addEventListener("click", function() {numEntry(temp)});
-  }
+/*********************************************************/
+/* DOM Event Listeners */
+/*********************************************************/
 
-  document.getElementById(".").addEventListener("click", function() {addDecimalPoint(".")});
-  document.getElementById("DEL").addEventListener("click", function() {numDelete()});
+let calcScreen = document.getElementById("calc_screen");
+//document.addEvenListener("click", ()=>calc_screen.innerHTML = result);
 
-  for (var y in operators)  {
-    let temp = operators[y];
-    document.getElementById(temp).addEventListener("click", function() {operatorEntry(temp);});
-    calcMemory = calcEntry;
-    calcEntry = 0;
-  }
 
-  document.getElementById("Ans").addEventListener("click", function() {
-    document.getElementById("screen").innerText = calcMemory;
-  });
+let BtnZero = document.getElementById("0");
+let BtnOne = document.getElementById("1");
+let BtnTwo = document.getElementById("2");
+let BtnThree = document.getElementById("3");
+let BtnFour = document.getElementById("4");
+let BtnFive = document.getElementById("5");
+let BtnSix = document.getElementById("6");
+let BtnSeven = document.getElementById("7");
+let BtnEight = document.getElementById("8");
+let BtnNine = document.getElementById("9");
 
-  document.getElementById("AC").addEventListener("click", function() {allDelete();});
-  document.getElementById("=").addEventListener("click", function() {executeCalc();});
-  
-//Attach Event Listeners to KeyCodes
-  
-  for (var x=48; x<58; x++)  {
-    let temp = x;
-    document.addEventListener('keypress', function (e) {
-    let key = e.which || e.keyCode;
-    if (key === temp) { numEntry(String.fromCharCode(temp)) }
-});
-  }
+BtnZero.addEvenListener("click", function(){calcScreen.innerHTML='0'});
+BtnOne.addEvenListener("click", function(){calcScreen.innerHTML='1'});
 
-  document.addEventListener("keypress", function(e) {
-    let key = e.which || e.keyCode;
-    if (key == 46) {addDecimalPoint(".")}
-    if (key == 127 || key == 8) {numDelete()}
-    if (key == 43) {operatorEntry("+")}
-    if (key == 45) {operatorEntry("-")}
-    if (key == 42) {operatorEntry("X")}
-    if (key == 47) {operatorEntry("/")}
-    if (key == 27) {allDelete()}
-    if (key == 61 || key == 13) {executeCalc();}
-  });
-  
-});
+/*function calcPrintZero()  {result==null? result=zero():result=zero(result); calcScreen.innerHTML='0';};
+
+document.BtnZero.addEvenListener("click", calcPrintZero);
+document.BtnOne.addEvenListener("click", ()=>result = one(result));
+document.BtnTwo.addEvenListener("click", ()=>result = two(result));
+document.BtnThree.addEvenListener("click", ()=>result = three(result));
+document.BtnFour.addEvenListener("click", ()=>result = four(result));
+document.BtnFive.addEvenListener("click", ()=>result = five(result));
+document.BtnSix.addEvenListener("click", ()=>result = six(result));
+document.BtnSeven.addEvenListener("click", ()=>result = seven(result));
+document.BtnEight.addEvenListener("click", ()=>result = eight(result));
+document.BtnNine.addEvenListener("click", ()=>result = nine(result));
+
+
+
+
+
+
+let BtnDEL = document.getElementById("DEL");
+let BtnAC = document.getElementById("AC");
+let BtnTimes = document.getElementById("Times");
+let BtnDivided = document.getElementById("DvidedBy");
+let BtnPlus = document.getElementById("Plus");
+let BtnMinus = document.getElementById("Minus");
+let BtnDot = document.getElementById("Dot");
+let BtnAns = document.getElementById("Ans");
+let BtnEquals = document.getElementById("Equals");
+
+
+*/
