@@ -1,7 +1,3 @@
-
-let result = null;
-
-
 /*********************************************************/
 /* Calculator functions: */
 /*********************************************************/
@@ -27,10 +23,14 @@ function dividedBy( b ) { return function( a ) { return a / b; }; };
 
 
 /*********************************************************/
-/* DOM Event Listeners */
+/* Define Elements and Event Listeners */
 /*********************************************************/
 
+
+
 let calcScreen = document.getElementById("calc_screen");
+let stagingScreen = document.getElementById("staging_screen");
+let resultScreen = document.getElementById("result_screen");
 //document.addEvenListener("click", ()=>calc_screen.innerHTML = result);
 
 
@@ -45,9 +45,17 @@ let BtnSeven = document.getElementById("7");
 let BtnEight = document.getElementById("8");
 let BtnNine = document.getElementById("9");
 
-BtnZero.addEvenListener("click", function(){calcScreen.innerHTML='0'});
-BtnOne.addEvenListener("click", function(){calcScreen.innerHTML='1'});
+/*********************************************************/
+/* Attach Event Listeners to DOM */
+/*********************************************************/
 
+document.addEventListener("DOMContentLoaded", function(event) {
+
+    BtnZero.addEventListener("click", function(){stagingScreen.innerHTML+='0'});
+    BtnOne.addEventListener("click", function(){stagingScreen.innerHTML+='1'});
+
+
+});
 /*function calcPrintZero()  {result==null? result=zero():result=zero(result); calcScreen.innerHTML='0';};
 
 document.BtnZero.addEvenListener("click", calcPrintZero);
