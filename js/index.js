@@ -1,88 +1,148 @@
 /*********************************************************/
-/* Calculator functions: */
+/* Cosmetic: Fix page height to viewport size */
 /*********************************************************/
 
+function windowResize() {
+   let wH = 0.95*window.innerHeight;
+   document.getElementById("app_container").style.height = wH.toString() + "px";
+   let wW = 0.95*window.innerWidth;
+   document.getElementById("app_container").style.width = wW.toString() + "px";
+}
 
+windowResize();
 
-function zero(func)   { return func ? func(0) : 0; };
-function one(func)    { return func ? func(1) : 1; };
-function two(func)    { return func ? func(2) : 2; };
-function three(func)  { return func ? func(3) : 3; };
-function four(func)   { return func ? func(4) : 4; };
-function five(func)   { return func ? func(5) : 5; };
-function six(func)    { return func ? func(6) : 6; };
-function seven(func)  { return func ? func(7) : 7; };
-function eight(func)  { return func ? func(8) : 8; };
-function nine(func)   { return func ? func(9) : 9; };
+/********************************************************/
+/* Calculator variables and functions: */
+/********************************************************/
 
+//define the ultimate operation that the calculator is executing
+let calcOperation = ""
+let calcResult = 0;
 
-function plus( b )      { return function( a ) { return a + b; }; };
-function minus( b )     { return function( a ) { return a - b; }; };
-function times( b )     { return function( a ) { return a * b; }; };
-function dividedBy( b ) { return function( a ) { return a / b; }; };
+function calcExecute() {
+    calcResult = eval(calcOperation);
+    resultScreen.innerHTML = calcResult;
+    calcOperation = "";
+    screenWipe = true;
+}
 
-
-/*********************************************************/
-/* Define Elements and Event Listeners */
-/*********************************************************/
-
-
-
-let calcScreen = document.getElementById("calc_screen");
+//bind variables to each subsection of the calculator screen
 let stagingScreen = document.getElementById("staging_screen");
 let resultScreen = document.getElementById("result_screen");
-//document.addEvenListener("click", ()=>calc_screen.innerHTML = result);
+let operatorScreen = document.getElementById("operator");
+
+//boolean switch to wipe stagingScreen after operator is entered
+let screenWipe = false;
+
+//declare functions to enter digits
+
+function enterDigit(i)  {
+    console.log(screenWipe);
+    calcOperation+=i.toString();
+    if (screenWipe==false) {
+        stagingScreen.innerHTML+=i.toString();
+    }
+    else {
+        stagingScreen.innerHTML=i.toString();
+        screenWipe = false;
+    }
+    console.log("clicked on a digit... current calcOperation is:" + calcOperation);
+}
+
+//declare operational functions
+
+function enterOperator(operator)    {
+    if (calcResult != 0)    {
+        calcOperation += calcResult;
+        calcOperation += operator
+        operatorScreen.innerHTML = operator;
+        stagingScreen.innerHTML = "";
+    }
+
+    else if (calcOperation.includes("*")||calcOperation.includes("/")||calcOperation.includes("+")||calcOperation.includes("-"))    {
+        calcExecute();
+        calcOperation = calcResult;
+        calcOperation += operator;
+        operatorScreen.innerHTML = operator;    
+    }    
+    else if (calcOperation.length>0)    {
+        calcOperation += operator;
+        operatorScreen.innerHTML = operator;
+        screenWipe = true;    
+    }
+}
+
+function calcDelete()   {
+    console.log("deleting last digit");
+    if (screenWipe==false)   {
+        stagingScreen.innerHTML = stagingScreen.innerHTML.slice(0, -1);
+        calcOperation = calcOperation.slice(0, -1);
+    }
+    else {resultScreen.innerHTML = "";}
+}
+
+function flushAll()   {
+    console.log("attempting to flushAll");
+
+    stagingScreen.innerHTML = "";
+    operatorScreen.innerHTML = "";
+    resultScreen.innerHTML = "";
+    calcOperation = "";
+    calcResult = 0;
+}
+
+function addDecimal()   {
+    if (stagingScreen.innerHTML == "")  {
+        calcOperation += "0.";
+        stagingScreen.innerHTML += "0.";
+    }
+    else {
+        calcOperation += ".";
+        stagingScreen.innerHTML += ".";
+    }
+}
 
 
-let BtnZero = document.getElementById("0");
-let BtnOne = document.getElementById("1");
-let BtnTwo = document.getElementById("2");
-let BtnThree = document.getElementById("3");
-let BtnFour = document.getElementById("4");
-let BtnFive = document.getElementById("5");
-let BtnSix = document.getElementById("6");
-let BtnSeven = document.getElementById("7");
-let BtnEight = document.getElementById("8");
-let BtnNine = document.getElementById("9");
 
 /*********************************************************/
-/* Attach Event Listeners to DOM */
-/*********************************************************/
+/* Attach Event Listeners to DOM*/
+/********************************************************/
 
 document.addEventListener("DOMContentLoaded", function(event) {
 
-    BtnZero.addEventListener("click", function(){stagingScreen.innerHTML+='0'});
-    BtnOne.addEventListener("click", function(){stagingScreen.innerHTML+='1'});
+//Attach listeners to digit clicks and keyboard digit presses//
+    
+    for (let i=0; i<10; i++)    {
+        let btn = document.getElementById(i.toString());
+        btn.addEventListener("click", function() {enterDigit(i)});
+        document.addEventListener("keydown", function(event)    {
+            if (event.keyCode == 48+i) {enterDigit(i);}
+        });
+    }
 
+//Attach listeners to digit clicks and keyboard digit presses//
+
+    document.getElementById("DEL").addEventListener("click", calcDelete);
+    document.getElementById("Times").addEventListener("click", enterOperator("*"));
+    document.getElementById("Divided").addEventListener("click", enterOperator("/"));
+    document.getElementById("Plus").addEventListener("click", enterOperator("+"));
+    document.getElementById("Minus").addEventListener("click", enterOperator("-"));
+    document.getElementById("Equals").addEventListener("click", calcExecute);
+    document.getElementById("AC").addEventListener("click", flushAll);
+    document.getElementById("dot").addEventListener("click", addDecimal);
+
+
+    document.addEventListener("keydown", function(event) {
+        let key = event.which || event.keyCode;
+        if (key == 8 || key == 46)  {calcDelete()}
+        if (key == 106) {enterOperator("*")}
+        if (key == 111) {enterOperator("/")}
+        if (key == 107) {enterOperator("+")}
+        if (key == 109) {enterOperator("-")}
+        if (key == 187 || key == 13) {calcExecute()}
+        if (key == 110 || key == 190) {addDecimal()}
+    });
 
 });
-/*function calcPrintZero()  {result==null? result=zero():result=zero(result); calcScreen.innerHTML='0';};
-
-document.BtnZero.addEvenListener("click", calcPrintZero);
-document.BtnOne.addEvenListener("click", ()=>result = one(result));
-document.BtnTwo.addEvenListener("click", ()=>result = two(result));
-document.BtnThree.addEvenListener("click", ()=>result = three(result));
-document.BtnFour.addEvenListener("click", ()=>result = four(result));
-document.BtnFive.addEvenListener("click", ()=>result = five(result));
-document.BtnSix.addEvenListener("click", ()=>result = six(result));
-document.BtnSeven.addEvenListener("click", ()=>result = seven(result));
-document.BtnEight.addEvenListener("click", ()=>result = eight(result));
-document.BtnNine.addEvenListener("click", ()=>result = nine(result));
 
 
-
-
-
-
-let BtnDEL = document.getElementById("DEL");
-let BtnAC = document.getElementById("AC");
-let BtnTimes = document.getElementById("Times");
-let BtnDivided = document.getElementById("DvidedBy");
-let BtnPlus = document.getElementById("Plus");
-let BtnMinus = document.getElementById("Minus");
-let BtnDot = document.getElementById("Dot");
-let BtnAns = document.getElementById("Ans");
-let BtnEquals = document.getElementById("Equals");
-
-
-*/

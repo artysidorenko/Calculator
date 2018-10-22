@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" >
 
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <head>
   <meta charset="UTF-8">
   <title>Javascript Calculator</title>
@@ -13,39 +15,45 @@
 </head>
 
 <body>
+  <main id="app_container">
+    <div id="calc_container">
 
-  <div id="calc_container">
+      <div id="calc_screen">
+        <div id="staging_screen">
+<!--           <p id="input">&nbsp</p> -->
+        </div>
+        <div id="operator">&nbsp</div>
+        <div id="result_screen">&nbsp
+<!--           <p id="operator"> <p> -->
+<!--           <p id="output">&nbsp</p> -->
+        </div>
+      </div>
 
-    <div id="calc_screen">
-      <p id="staging_screen">&nbsp</p>
-      <p id="result_screen">&nbsp</p>
+      <button id="7">7</button>
+      <button id="8">8</button>
+      <button id="9">9</button>
+      <button id="DEL">Del</button>
+      <button id="AC">AC</button>
+
+      <button id="4">4</button>
+      <button id="5">5</button>
+      <button id="6">6</button>
+      <button id="Times">X</button>
+      <button id="Divided">/</button>
+
+      <button id="1">1</button>
+      <button id="2">2</button>
+      <button id="3">3</button>
+      <button id="Plus">+</button>
+      <button id="Minus">-</button>
+
+      <button id="0">0</button>
+      <button id="dot">.</button>
+      <button id="Ans">Ans</button>
+      <button id="Equals" class="large_button">=</button>
+
     </div>
-
-    <button id="7">7</button>
-    <button id="8">8</button>
-    <button id="9">9</button>
-    <button id="DEL"">DEL</button>
-    <button id="AC">AC</button>
-
-    <button id="4">4</button>
-    <button id="5">5</button>
-    <button id="6">6</button>
-    <button id="Times">X</button>
-    <button id="Divided">/</button>
-
-    <button id="1">1</button>
-    <button id="2">2</button>
-    <button id="3">3</button>
-    <button id="Plus">+</button>
-    <button id="Minus">-</button>
-
-    <button id="0">0</button>
-    <button id="dot">.</button>
-    <button id="Ans">Ans</button>
-    <button id="Equals" class="large_button">=</button>
-    
-  </div>
-  
+  </main>
   
 
     <script  src="js/index.js"></script>
