@@ -17,59 +17,70 @@ windowResize();
 
 //define the ultimate operation that the calculator is executing
 let calcOperation = ""
-let calcResult = 0;
+let calcResult = null;
 
-function calcExecute() {
-    calcResult = eval(calcOperation);
-    resultScreen.innerHTML = calcResult;
-    calcOperation = "";
-    screenWipe = true;
-}
+
 
 //bind variables to each subsection of the calculator screen
 let stagingScreen = document.getElementById("staging_screen");
 let resultScreen = document.getElementById("result_screen");
 let operatorScreen = document.getElementById("operator");
 
+//variables used for app control:
 //boolean switch to wipe stagingScreen after operator is entered
 let screenWipe = false;
+//array with possible operators for testing purposes
+let operatorArray = ["*", "/", "+", "-"];
 
 //declare functions to enter digits
 
 function enterDigit(i)  {
-    console.log(screenWipe);
     calcOperation+=i.toString();
     if (screenWipe==false) {
         stagingScreen.innerHTML+=i.toString();
     }
     else {
         stagingScreen.innerHTML=i.toString();
+        resultScreen.innerHTML="";
+        if (operatorScreen.innerHTML=="=")  {operatorScreen.innerHTML="";}
         screenWipe = false;
     }
-    console.log("clicked on a digit... current calcOperation is:" + calcOperation);
 }
 
 //declare operational functions
 
 function enterOperator(operator)    {
-    if (calcResult != 0)    {
-        calcOperation += calcResult;
-        calcOperation += operator
-        operatorScreen.innerHTML = operator;
-        stagingScreen.innerHTML = "";
+    screenWipe = true;
+    if (operatorArray.indexOf(calcOperation[calcOperation.length - 1]) != -1)  {
+      calcOperation = calcOperation.slice(0, -1);
+      calcOperation += operator;
     }
+    else if (operatorArray.some((elem)=>calcOperation.includes(elem)))    {
+      calcExecute();
+      calcOperation = calcResult;
+      calcOperation += operator;
+      operatorScreen.innerHTML = operator;
+      stagingScreen.innerHTML = calcResult;
+    }
+    else if (operatorScreen.innerHTML=="=") {
+      calcOperation = calcResult;
+      calcOperation += operator;
+      operatorScreen.innerHTML = operator;
+      stagingScreen.innerHTML = calcResult;
+    }
+    else if (calcOperation.length > 0)  {
+      calcOperation += operator;
+      operatorScreen.innerHTML = operator;
+    }
+}
 
-    else if (calcOperation.includes("*")||calcOperation.includes("/")||calcOperation.includes("+")||calcOperation.includes("-"))    {
-        calcExecute();
-        calcOperation = calcResult;
-        calcOperation += operator;
-        operatorScreen.innerHTML = operator;    
-    }    
-    else if (calcOperation.length>0)    {
-        calcOperation += operator;
-        operatorScreen.innerHTML = operator;
-        screenWipe = true;    
-    }
+function calcExecute() {
+    calcResult = eval(calcOperation);
+    resultScreen.innerHTML = calcResult;
+    operatorScreen.innerHTML = "=";
+    stagingScreen.innerHTML = "";
+    calcOperation = "";
+    screenWipe = true;
 }
 
 function calcDelete()   {
@@ -78,7 +89,11 @@ function calcDelete()   {
         stagingScreen.innerHTML = stagingScreen.innerHTML.slice(0, -1);
         calcOperation = calcOperation.slice(0, -1);
     }
-    else {resultScreen.innerHTML = "";}
+    else {
+      resultScreen.innerHTML = "";
+      operatorScreen.innerHTML = "";
+      stagingScreen.innerHTML = "";
+    }
 }
 
 function flushAll()   {
@@ -104,6 +119,8 @@ function addDecimal()   {
 
 
 
+
+
 /*********************************************************/
 /* Attach Event Listeners to DOM*/
 /********************************************************/
@@ -111,7 +128,7 @@ function addDecimal()   {
 document.addEventListener("DOMContentLoaded", function(event) {
 
 //Attach listeners to digit clicks and keyboard digit presses//
-    
+
     for (let i=0; i<10; i++)    {
         let btn = document.getElementById(i.toString());
         btn.addEventListener("click", function() {enterDigit(i)});
@@ -130,6 +147,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
     document.getElementById("Equals").addEventListener("click", calcExecute);
     document.getElementById("AC").addEventListener("click", flushAll);
     document.getElementById("dot").addEventListener("click", addDecimal);
+    document.getElementById("Ans").addEventListener("click", function() {
+      if(calcResult!=null) {enterDigit(calcResult);}
+    });
 
 
     document.addEventListener("keydown", function(event) {
@@ -144,5 +164,3 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
 
 });
-
-
