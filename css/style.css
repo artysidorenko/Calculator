@@ -23,12 +23,12 @@ main {
   border-left-width: 3px;
   border-top-width: 3px;
   padding: 15px;
-  width: 250px;
+  width: 270px;
   height: 400px;
   box-sizing: border-box;
   margin: auto;
   grid-template:
-  [screen-start] 2.5fr [keypad-start] 1fr [row3] 1fr [row4] 1fr [row5] 1fr [row-end]/  
+  [screen-start] 2.5fr [keypad-start] 1fr [row3] 1fr [row4] 1fr [row5] 1fr [row-end]/
   [col-start] 1fr [col2] 1fr [col3] 1fr [col4] 1fr [col5] 1fr [col-end];
   grid-gap: 5px 5px;
 }
@@ -88,7 +88,7 @@ main {
 /*********************************************************/
 
 button {
-  width: 35px;
+  width: 32px;
   height: 35px;;
   font-family: monospace;
   background-color: #CDCDB4;
@@ -117,9 +117,10 @@ button:active {
   //transform: translateY(3px);
 }
 
-#DEL, #Ans {
+#DEL, #Ans, #AC {
   font-size: 1em;
   font-weight: bold;
+  text-align: left;
 }
 
 
@@ -140,4 +141,3 @@ button:active {
 #4, #5, #6, #Times, #Divided {grid-row: row3/row4}
 #1, #2, #3, #Plus, #Minus {grid-row: row4/row5}
 #0, #dot, #Plus, #Equals {grid-row: row5/row-end}
-
