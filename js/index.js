@@ -1,5 +1,5 @@
 /*********************************************************/
-/* Cosmetic: Fix page height to viewport size */
+/* Cosmetic: Fix page height to viewport size and lock orientation*/
 /*********************************************************/
 
 function windowResize() {
@@ -10,6 +10,9 @@ function windowResize() {
 }
 
 windowResize();
+
+
+
 
 /********************************************************/
 /* Calculator variables and functions: */
