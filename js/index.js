@@ -140,10 +140,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 //Attach listeners to digit clicks and keyboard digit presses//
 
     document.getElementById("DEL").addEventListener("click", calcDelete);
-    document.getElementById("Times").addEventListener("click", enterOperator("*"));
-    document.getElementById("Divided").addEventListener("click", enterOperator("/"));
-    document.getElementById("Plus").addEventListener("click", enterOperator("+"));
-    document.getElementById("Minus").addEventListener("click", enterOperator("-"));
+    document.getElementById("Times").addEventListener("click", ()=>enterOperator("*"));
+    document.getElementById("Divided").addEventListener("click", ()=>enterOperator("/"));
+    document.getElementById("Plus").addEventListener("click", ()=>enterOperator("+"));
+    document.getElementById("Minus").addEventListener("click", ()=>enterOperator("-"));
     document.getElementById("Equals").addEventListener("click", calcExecute);
     document.getElementById("AC").addEventListener("click", flushAll);
     document.getElementById("dot").addEventListener("click", addDecimal);

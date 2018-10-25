@@ -1,7 +1,7 @@
 # Calculator
 
-JavaScript Test - Calculator Web-App: basic build w/o the use of libraries or frameworks.
+JavaScript Test - Calculator Web-App: basic calculator build w/o the use of libraries or frameworks.
 
-Note: Currently WIP - Pushing onto GitHub to backup files due to computer hardware issues.
+Any feedback welcome.
 
-Readme pending.
+
