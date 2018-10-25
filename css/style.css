@@ -113,8 +113,8 @@ button:focus {
 
 button:active {
   background-color: #CDCDB4;
-  //box-shadow: 0 1px #666;
-  //transform: translateY(3px);
+  box-shadow: 0 1px #666;
+  transform: translateY(3px);
 }
 
 #DEL, #Ans, #AC {
